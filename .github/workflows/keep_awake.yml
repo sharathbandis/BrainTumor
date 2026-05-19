@@ -1,20 +1,18 @@
 name: Keep Streamlit Awake
 
-# This controls when the workflow will run
 on:
   schedule:
-    # Runs at minute 0 past every 10th hour.
-    # This prevents the 12-hour Streamlit timeout.
     - cron: '0 */10 * * *'
-  
-  # Allows you to run this workflow manually from the Actions tab if needed
   workflow_dispatch:
+
+# Add this to fix the Node 20 deprecation warning
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   keep-awake:
     runs-on: ubuntu-latest
     
-    # Give the action permission to push to your repository
     permissions:
       contents: write
 
