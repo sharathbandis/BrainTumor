@@ -1,0 +1,30 @@
+name: Keep Streamlit Awake
+
+# This controls when the workflow will run
+on:
+  schedule:
+    # Runs at minute 0 past every 10th hour.
+    # This prevents the 12-hour Streamlit timeout.
+    - cron: '0 */10 * * *'
+  
+  # Allows you to run this workflow manually from the Actions tab if needed
+  workflow_dispatch:
+
+jobs:
+  keep-awake:
+    runs-on: ubuntu-latest
+    
+    # Give the action permission to push to your repository
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create an empty commit to trigger Streamlit rebuild
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit --allow-empty -m "Automated empty commit to keep Streamlit app awake"
+          git push
